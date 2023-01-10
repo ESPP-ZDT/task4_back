@@ -24,7 +24,7 @@ function UsersGetAll(request, response) {
         }
 
         // entry point to buisness logic
-        const sqlQuery = `select * from PakoTest.Users`;
+        const sqlQuery = `select * from Users`;
         connection.query(sqlQuery, (error, rows) => {
             connection.release();
             if (error) {
@@ -47,8 +47,8 @@ function UsersAddOne(request, response) {
         }
 
         // entry point to buisness logic
-        const sqlSearch = `select 1 from PakoTest.Users where UserEmail = ?`;
-        const sqlInsert = `insert into PakoTest.Users(UserName, UserPassword, UserEmail, LastLoginTime, RegistrationTime) values (?,?,?,?,?)`;
+        const sqlSearch = `select 1 from Users where UserEmail = ?`;
+        const sqlInsert = `insert into Users(UserName, UserPassword, UserEmail, LastLoginTime, RegistrationTime) values (?,?,?,?,?)`;
         const userName = request.body['UserName'];
         const userPassword = request.body['UserPassword'];
         const userEmail = request.body['UserEmail'];
@@ -85,7 +85,7 @@ function UsersUpdateOne(request, response) {
         }
 
         // entry point to buisness logic
-        const sqlUpdate = `update PakoTest.Users set
+        const sqlUpdate = `update Users set
                     UserName=?,
                     UserPassword=?,
                     UserEmail=?,
@@ -122,7 +122,7 @@ function UsersDeleteOne(request, response) {
         }
 
         // entry point to buisness logic
-        const sqlQuery = `delete from PakoTest.Users where UserId=?`;
+        const sqlQuery = `delete from Users where UserId=?`;
         const userId = request.params.id;
         const sqlValues = [userId];
         connection.query(sqlQuery, sqlValues, (deleteError) => {
@@ -149,7 +149,7 @@ function UserAuthentication(request, response) {
         const userEmail = request.body['UserEmail'];
         console.log('Email: ' + userEmail);
         const userPassword = request.body['UserPassword'];
-        const sqlSearch = `select UserPassword, UserStatus from PakoTest.Users where UserEmail = ?`;
+        const sqlSearch = `select UserPassword, UserStatus from Users where UserEmail = ?`;
         connection.query(mysql.format(sqlSearch, [userEmail]), async (searchError, searchResult) => {
             console.log('Error' + searchError);
             console.log('Result' + JSON.stringify(searchResult));
@@ -169,7 +169,7 @@ function UserAuthentication(request, response) {
             const psswrd = searchResult[0].UserPassword;
             if (psswrd.localeCompare(userPassword) === 0) {
                 // save last login time
-                const sqlUpdate = `update PakoTest.Users set LastLoginTime = ? where UserEmail = ?`;
+                const sqlUpdate = `update Users set LastLoginTime = ? where UserEmail = ?`;
                 const lastLoginTime = new Date().toISOString().slice(0, 19).replace('T', ' ');
                 connection.query(mysql.format(sqlUpdate, [lastLoginTime, userEmail]), async (updateError) => {
                     connection.release();
@@ -198,7 +198,7 @@ function UsersBlockOne(request, response) {
         }
 
         // entry point to buisness logic
-        const sqlUpdate = `update PakoTest.Users set UserStatus=0 where UserId=?`;
+        const sqlUpdate = `update Users set UserStatus=0 where UserId=?`;
         const userId = request.body['UserId'];
         connection.query(mysql.format(sqlUpdate, [userId]), async (error) => {
             connection.release();
@@ -221,7 +221,7 @@ function UsersUnBlockAll(request, response) {
         }
 
         // entry point to buisness logic
-        const sqlUpdate = `update PakoTest.Users set UserStatus=1`;
+        const sqlUpdate = `update Users set UserStatus=1`;
         connection.query(mysql.format(sqlUpdate), async (error) => {
             connection.release();
             if (error) {
