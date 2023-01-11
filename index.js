@@ -8,6 +8,7 @@ var app = Express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({credentials: true, origin: true}));
+
 app.options('*', cors());
 
 app.listen(49146, () => {
