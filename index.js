@@ -7,7 +7,8 @@ const mysqlUsers = require("./services/users");
 var app = Express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors({credentials: true, origin: true}));
+app.options('*', cors());
 
 app.listen(49146, () => {
     console.log('API starting...');
